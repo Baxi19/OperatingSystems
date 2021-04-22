@@ -24,17 +24,10 @@ while True:
     connection, client_address = sock.accept()
     try:
         print('NODE_SECONDARY_1>Connection from', client_address)
-
-        """
-        while 1:
-            data = connection.recv(4096)
-            if not data: break
-            connection.send(data)
-        print("Recibido: ")
-        """
+        
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(4096)
+            data = connection.recv(1024)
             print('NODE_SECONDARY_1>Received {!r}'.format(data))
             if data:
                 # YOUR CODE HERE!!!!
@@ -47,6 +40,13 @@ while True:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break
         
+        """
+        while 1:
+            data = connection.recv(1024)
+            if not data: break
+            connection.send(data)
+        print("Recibido: ")
+        """
 
 
     finally:
