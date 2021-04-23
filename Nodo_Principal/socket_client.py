@@ -19,29 +19,21 @@ class Socket_Client:
 
         try:
             # Send data
-            message = self.data
-            print('NODE_1>Sending {!r}'.format(message))
-            sock.sendall(message)
-
+            sock.sendall(self.data)
+            print('NODE_1>Data Sended by sockets')
+            
+            """
             # Look for the response
             amount_received = 0
-            amount_expected = len(message)
+            amount_expected = len(self.data)
 
+            
             while amount_received < amount_expected:
-                data = sock.recv(1024)
+                data = sock.recv(2048)
                 amount_received += len(data)
                 print('NODE_1>Received {!r}'.format(data))
-            
-
-            #arr = ["1","2","3","4","5","6"]
-            #data_string = pickle.dumps(arr)
-            #sock.send(data_string)
-
-            #data = sock.recv(4096)
-            #data_arr = pickle.loads(data)
-            #print("Data recibida")
-            #print(repr(data_arr))
-            
+            """
+            sock.close()
 
         finally:
             print('NODE_1>Closing socket')
