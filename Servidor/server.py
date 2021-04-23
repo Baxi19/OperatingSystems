@@ -40,15 +40,35 @@ def deleteAllGames():
         games = []
         return jsonify({"status": "ok"})
 
-# Update Game
-@app.route("/updateGame", methods=['PUT'])
-def updateGame(name, newItem):
+# Update Amazon Game
+@app.route("/updateAmazonGame", methods=['PUT'])
+def updateAmazonGame(name, newItem):
     global games
     for game in games:
         if game['name'] == name:
             game['price'] = newItem.price
-            game['store'] = newItem.store
+            game['store'] = 'Amazon'
             return jsonify(games)
+
+# Update Time Game
+@app.route("/updateTimeGame", methods=['PUT'])
+def updateTimeGame(name, time):
+    global games
+    for game in games:
+        if game['name'] == name:
+            game['time'] = time
+            return jsonify(games)
+
+# Update MetaData Game
+@app.route("/updateMetaDataGame", methods=['PUT'])
+def updateMetaDataGame(name, meta):
+    global games
+    for game in games:
+        if game['name'] == name:
+            game['meta'] = meta
+            return jsonify(games)
+
+
 
 
 if __name__ == "__main__":

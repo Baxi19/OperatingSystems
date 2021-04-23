@@ -1,6 +1,7 @@
-import socket, pickle
+import socket
 import sys
-
+import pickle
+import json
 
 # it should be in .env
 ip = 'localhost'
@@ -24,30 +25,31 @@ while True:
     connection, client_address = sock.accept()
     try:
         print('NODE_SECONDARY_1>Connection from', client_address)
-        
+
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(1024)
-            print('NODE_SECONDARY_1>Received {!r}'.format(data))
-            if data:
-                # YOUR CODE HERE!!!!
-                # data_arr = pickle.loads(data)
-                # print(repr(data_arr))
+            data = connection.recv(2048)
+            new_data = []
 
-                print('NODE_SECONDARY_1>Sending response to node 1')
-                connection.sendall(b'Hello, Im Node Secundary 1')
+            try:
+                new_data = pickle.loads(data)
+            except EOFError:
+                print("NODE_SECONDARY_1>List Emply")
+
+            if data:
+                list_games = new_data.split(sep='\\^')
+                print("NODE_SECONDARY_1>Total: " + str(len(list_games)))
+                for element in list_games:
+                    game = element.split(sep='\\~')
+                    print("Name: " + game[0] + " ,Price: " + game[1])
+                    # YOUR CODE HERE!!!!
+
+                #print('NODE_SECONDARY_1>Sending response to node 1')
+                #connection.sendall(b'Data ready, Im Node Secundary 1')
+                break
             else:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break
-        
-        """
-        while 1:
-            data = connection.recv(1024)
-            if not data: break
-            connection.send(data)
-        print("Recibido: ")
-        """
-
 
     finally:
         # Clean up the connection

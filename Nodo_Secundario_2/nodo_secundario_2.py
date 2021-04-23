@@ -1,5 +1,7 @@
 import socket
 import sys
+import pickle
+import json
 
 
 # it should be in .env
@@ -27,13 +29,25 @@ while True:
 
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(1024)
-            print('NODE_SECONDARY_2>Received {!r}'.format(data))
-            if data:
-                # YOUR CODE HERE!!!!
+            data = connection.recv(2048)
+            new_data = []
 
-                print('NODE_SECONDARY_2>Sending response to node 1')
-                connection.sendall(b'Hello, Im Node Secundary 2')
+            try:
+                new_data = pickle.loads(data)
+            except EOFError:
+                print("NODE_SECONDARY_2>List Emply")
+            
+            if data:
+                list_games = new_data.split(sep='\\^')
+                print("NODE_SECONDARY_2>Total: " + str(len(list_games)))
+                for element in list_games:
+                    game = element.split(sep='\\~')
+                    print("Name: " + game[0] + " ,Price: " + game[1])
+                    # YOUR CODE HERE!!!!
+
+                #print('NODE_SECONDARY_2>Sending response to node 1')
+                #connection.sendall(b'Data ready, Im Node Secundary 2')
+                break 
             else:
                 print('NODE_SECONDARY_2>No data from', client_address)
                 break
