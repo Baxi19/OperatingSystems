@@ -22,7 +22,7 @@ sock.listen(connections)
 
 while True:
     # Wait for a connection
-    print('NODE_SECONDARY_2>Waiting for a connection')
+    print('\nNODE_SECONDARY_2>Waiting for a connection')
     connection, client_address = sock.accept()
     try:
         print('NODE_SECONDARY_2>Connection from', client_address)
