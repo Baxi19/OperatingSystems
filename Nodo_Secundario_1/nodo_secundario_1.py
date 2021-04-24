@@ -6,7 +6,7 @@ import json
 # it should be in .env
 ip = 'localhost'
 port = 10000
-connections = 5
+connections = 10
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,7 +21,7 @@ sock.listen(connections)
 
 while True:
     # Wait for a connection
-    print('NODE_SECONDARY_1>Waiting for a connection')
+    print('\nNODE_SECONDARY_1>Waiting for a connection')
     connection, client_address = sock.accept()
     try:
         print('NODE_SECONDARY_1>Connection from', client_address)

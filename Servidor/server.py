@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import json
 
 app = Flask(__name__)
 CORS(app)
@@ -21,7 +20,7 @@ def loadGames():
     global games
     if request.method == 'POST':
         games.extend(request.json['array'])
-        print(len(games))
+        print("SERVER>Quantity of games: " + str(len(games)))
         return jsonify({"status": "ok"})
 
 # Insert 1 Game 
@@ -38,6 +37,7 @@ def deleteAllGames():
     global games
     if request.method == 'GET':
         games = []
+        print("SERVER>Quantity of games: " + str(len(games)))
         return jsonify({"status": "ok"})
 
 # Update Amazon Game
@@ -69,8 +69,6 @@ def updateMetaDataGame(name, meta):
             return jsonify(games)
 
 
-
-
 if __name__ == "__main__":
-    # cambiar ip de su computador 'ipv4' o localhost
+    # 'ipv4' o localhost
     app.run(host='localhost', port=8888)
