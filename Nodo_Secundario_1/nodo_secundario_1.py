@@ -3,6 +3,7 @@ import sys
 import pickle
 import json
 
+
 # it should be in .env
 ip = 'localhost'
 port = 10000
@@ -43,6 +44,8 @@ while True:
                     game = element.split(sep='\\~')
                     print("Name: " + game[0] + " ,Price: " + game[1])
                     # YOUR CODE HERE!!!!
+                    
+                    
 
                 #print('NODE_SECONDARY_1>Sending response to node 1')
                 #connection.sendall(b'Data ready, Im Node Secundary 1')

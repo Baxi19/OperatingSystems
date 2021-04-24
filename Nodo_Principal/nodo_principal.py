@@ -9,7 +9,7 @@ import pickle
 
 # Insertion at server from 24 to 24 games
 def insertAllGames(games):
-    url = 'http://localhost:8888/loadGames'
+    url = 'https://operating-systems.herokuapp.com/loadGames'
     header = {"content-type": "application/json"}
     data = json.dumps({'array': games})
     res = requests.post(url, data=data, headers=header, verify=False)
@@ -17,7 +17,7 @@ def insertAllGames(games):
 
 # Clean the games list
 def deleteAllGames():
-    url = 'http://localhost:8888/deleteAllGames'
+    url = 'https://operating-systems.herokuapp.com/deleteAllGames'
     res = requests.get(url)
     print("NODE_1>Delete all games in server: " + res.text)
 
