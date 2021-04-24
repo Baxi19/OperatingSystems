@@ -7,7 +7,6 @@ CORS(app)
 # Games list
 games = []
 
-
 # Get Games
 @app.route("/getGames", methods=['GET'])
 def getGames():
