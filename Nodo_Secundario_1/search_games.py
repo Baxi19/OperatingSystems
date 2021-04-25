@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
+import json
 
 # Search game in Amazon
 def search(name, price):
@@ -28,12 +29,18 @@ def search(name, price):
     searchCategory = driver.find_element_by_id('nav-search-label-id')
 
     if (searchCategory.text != "Juegos de PlayStation 5"):
-        print("No se encontro el elemento solicitado")
+        # The requested item was not found
+        return False
     else:
+        if (price == "Gratuito"):
+            return False
         # Price
         price_find_element = driver.find_element_by_xpath('//*[@class="a-offscreen"]')
         price_find = price_find_element.get_attribute('innerText')
-        
+        # Price wasn't available
+        if ("US$" in price_find == False):
+            return False
+
         price_find = price_find.split("US$\xa0")[1]
         price = price.split("US$")[1]
         return compare_price(price, price_find)
@@ -43,3 +50,19 @@ def compare_price(actual_price, price_find):
         return False
     else:
         return price_find
+
+# Update Amazon price
+def updateAmazonGame(game):
+    url = 'https://operating-systems.herokuapp.com/updateAmazonGame'
+    header = {"content-type": "application/json"}
+    data = json.dumps({"games": game})
+    res = requests.put(url, data=data, headers=header)
+    print("NODE_SECONDARY_1>Game price updated in server: " + res.text)
+
+"""
+game1 = {
+    "name": "Bugsnax",
+    "price": 1
+}
+updateAmazonGame(game1)
+"""

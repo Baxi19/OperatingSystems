@@ -2,8 +2,8 @@ import socket
 import sys
 import pickle
 import json
-from search_games.py import search
-
+from search_games import search
+from search_games import updateAmazonGame
 
 # it should be in .env
 ip = 'localhost'
@@ -43,11 +43,16 @@ while True:
                 print("NODE_SECONDARY_1>Total: " + str(len(list_games)))
                 for element in list_games:
                     game = element.split(sep='\\~')
-                    print("Name: " + game[0] + " ,Price: " + game[1])
+                    print("Name: " + game[0] + ", Price: " + game[1])
                     # Find the best price
                     best_price = search(game[0], game[1])
+
                     if (best_price != False):
-                        print("Cambiar store y precio")
+                        gameUpdate = {
+                            "name": game[0],
+                            "price": "US$"+best_price
+                        }
+                        updateAmazonGame(gameUpdate)
                     
                 #print('NODE_SECONDARY_1>Sending response to node 1')
                 #connection.sendall(b'Data ready, Im Node Secundary 1')
