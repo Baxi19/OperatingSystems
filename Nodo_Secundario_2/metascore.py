@@ -1,55 +1,42 @@
 import requests
 import bs4
 
-# It's "seems" a good idea to use this "enum", for now
-class Category(object):
-    ALL = 0
-    MOVIE = 1
-    GAME = 2
-    ALBUM = 3
-    TV = 4
-    PERSON = 5
-    TRAILER = 6
-    COMPANY = 7
+def print_resource_data(resource):
+    print ("Name: " + resource.name)
+    print ("Metascore: " + str(resource.metascore))
+    
+def round_to(n, precision):
+    correction = 0.5 if n >= 0 else -0.5
+    return int( n/precision+correction ) * precision
+
+def  meta(name):
+    scraper = Scraper()
+    query=Query(name)
+    url=query.get_url()
+    game = scraper.get(url)
+    game.metascore=round_to(game.metascore/20,0.5)
+    #print_resource_data(game)
+    return game
+
 
 # Contains info about the query to be made
 class Query(object):
     # Standard constructor (w/ parameters)
-    def __init__(self, category, terms):
-        self.category = category
+    def __init__(self, terms):
         self.terms = terms
-        self.base_url = "http://www.metacritic.com/search/"
-        partial_url = {Category.ALL: self.base_url + "all",
-                       Category.MOVIE: self.base_url + "movie",
-                       Category.GAME: self.base_url + "game",
-                       Category.ALBUM: self.base_url + "album",
-                       Category.TV: self.base_url + "tv",
-                       Category.PERSON: self.base_url + "person",
-                       Category.TRAILER: self.base_url + "trailer",
-                       Category.COMPANY: self.base_url + "company"}[self.category]
-        self.url = partial_url + "/" + terms + "/results"
-
+        self.base_url = "http://www.metacritic.com/search/game"
+        self.url = self.base_url+ "/" + terms + "/results"
     # Returns the URL of the created query
     def get_url(self):
-        return self.url
+        scra=Scraper()
+        urlf="http://www.metacritic.com"+scra.search(self.url)
+        return urlf
 
 # This class represents a generic resource found at Metacritic
 class Resource(object):
-    def __init__(self, name, date, metascore, userscore):
+    def __init__(self, name, metascore):
         self.name = name
-        self.date = date
-        
-        self.metascore = metascore
-        self.userscore = userscore
-      
-
-
-class Game(Resource):
-    def __init__(self, name, date, category, metascore, userscore, description, platform):
-        super.__init__(name, date, category, metascore, userscore, description)
-        self.platform = platform
-
-
+        self.metascore = metascore     
 class Response(object):
     def __init__(self, status, content):
         self.status = status
@@ -57,7 +44,6 @@ class Response(object):
 
     def valid(self):
         return (self.status == 200)
-
 
 class Browser(object):
     def get(self, url):
@@ -80,13 +66,26 @@ class Scraper(object):
         self.soup = bs4.BeautifulSoup(self.response.content,features="html.parser")
         
         return self.extract_data()
-
+    def search(self, url):
+        self.response = self.browser.get(url)
+        
+        self.soup = bs4.BeautifulSoup(self.response.content,features="html.parser")
+        
+        return self.extract_url()
+    def extract_url(self):
+        titles = self.soup.select(".product_title")
+        try:
+            for a in titles[0].find_all('a', href=True):
+                url=a['href']
+            
+            return url
+        except:
+            print(error)
+            return ("mal")
     def extract_data(self):
         name = self._extract_name()
-        date = self._extract_date()
         metascore = self._extract_metascore()
-        userscore = self._extract_userscore()
-        resource = Resource(name, date, metascore, userscore)
+        resource = Resource(name, metascore)
         return resource
 
     def _extract_name(self):
@@ -102,23 +101,12 @@ class Scraper(object):
             print(error)
             return ("mal")
 
-    def _extract_date(self):
-        dates = self.soup.select(".release_data")
-        date = dates[0].select(".data")[0].text.strip()
-        
-        return date
-
-
+    
     def _extract_metascore(self):
         section = self.soup.select(".metascore_wrap")[0]
         
         score = section.select(".metascore_w")[0].text
         
         return int(score)
-
-    def _extract_userscore(self):
-        section = self.soup.select(".userscore_wrap")[0]
-        score = section.select(".metascore_w")[0].text
-        return float(score)
-
    
+

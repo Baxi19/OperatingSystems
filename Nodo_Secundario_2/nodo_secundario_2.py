@@ -2,7 +2,7 @@ import socket
 import sys
 import pickle
 import json
-
+import metascore
 
 # it should be in .env
 ip = 'localhost'
@@ -43,8 +43,7 @@ while True:
                 for element in list_games:
                     game = element.split(sep='\\~')
                     print("Name: " + game[0] + " ,Price: " + game[1])
-                    # YOUR CODE HERE!!!!
-
+                    game_meta= metascore.meta(game[0])
                 #print('NODE_SECONDARY_2>Sending response to node 1')
                 #connection.sendall(b'Data ready, Im Node Secundary 2')
                 break 
