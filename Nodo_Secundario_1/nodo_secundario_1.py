@@ -2,6 +2,7 @@ import socket
 import sys
 import pickle
 import json
+from search_games.py import search
 
 
 # it should be in .env
@@ -43,10 +44,11 @@ while True:
                 for element in list_games:
                     game = element.split(sep='\\~')
                     print("Name: " + game[0] + " ,Price: " + game[1])
-                    # YOUR CODE HERE!!!!
+                    # Find the best price
+                    best_price = search(game[0], game[1])
+                    if (best_price != False):
+                        print("Cambiar store y precio")
                     
-                    
-
                 #print('NODE_SECONDARY_1>Sending response to node 1')
                 #connection.sendall(b'Data ready, Im Node Secundary 1')
                 break

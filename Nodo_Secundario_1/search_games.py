@@ -40,9 +40,6 @@ def search(name, price):
 
 def compare_price(actual_price, price_find):
     if (actual_price <= price_find):
-        return actual_price
+        return False
     else:
         return price_find
-
-better = search("Demon's Souls","US$89.99")
-print(better)
