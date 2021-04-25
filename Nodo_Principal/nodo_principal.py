@@ -136,9 +136,9 @@ def get_data(quantity, multiprocessing, seconds):
     else:
         get_ps5_games_secuential(quantity)
     
-    time.sleep(seconds)
-    print("NODE_1>Sleep process")
-    get_data(quantity, multiprocessing, seconds)
+    #print("NODE_1>Sleep process")
+    #time.sleep(seconds)
+    #get_data(quantity, multiprocessing, seconds)
 
 if __name__ == "__main__":
     quantity = 4 # Note: quantity = (quantity * 24)

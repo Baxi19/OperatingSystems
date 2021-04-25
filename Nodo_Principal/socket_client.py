@@ -33,7 +33,6 @@ class Socket_Client:
                 amount_received += len(data)
                 print('NODE_1>Received {!r}'.format(data))
             """
-            sock.close()
 
         finally:
             print('NODE_1>Closing socket')
