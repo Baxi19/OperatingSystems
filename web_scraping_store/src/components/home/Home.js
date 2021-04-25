@@ -15,12 +15,14 @@ const Home = () => {
 
   const getGamesInfo = () => {
     dispatch(getGamesInfoActions());
+    setTimeout("", 2000);
     setGames(listGames);
   };
 
   useEffect(() => {
+    setGames([]);
+    setTimeout("", 1000);
     getGamesInfo();
-    //react-hooks/exhaustive-deps
   }, [games]);
 
   return (
@@ -36,8 +38,10 @@ const Home = () => {
               item xs 
               spacing={1}
             >
-            {listGames &&
-              listGames.map((item, i) => <CardGames key={i} item={item} />)}
+            {listGames && 
+              listGames.map((item, i) => 
+                <CardGames key={i} item={item}/> 
+            )}
           </Grid>
         </Grid>
       </div>

@@ -12,10 +12,8 @@ ReactDOM.render(
   <Provider store={generateStore()}>
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
-        
         <Switch>
           <Route exact path="/(home|)" component={Home}></Route>
-          
         </Switch>
       </BrowserRouter>
     </MuiThemeProvider>

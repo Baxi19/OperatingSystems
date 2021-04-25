@@ -15,17 +15,43 @@ def insertAllGames(games):
     res = requests.post(url, data=data, headers=header, verify=False)
     print("NODE_1>Games inserted in server: " + res.text)
 
+# Update Amazon price
+def updateAmazonGame(game):
+    url = 'https://operating-systems.herokuapp.com/updateAmazonGame'
+    header = {"content-type": "application/json"}
+    data = json.dumps({"games": game})
+    res = requests.put(url, data=data, headers=header)
+    print("NODE_1>Game price updated in server: " + res.text)
+
+# Update Time
+def updateTimeGame(game):
+    url = 'https://operating-systems.herokuapp.com/updateTimeGame'
+    header = {"content-type": "application/json"}
+    data = json.dumps({"games": game})
+    res = requests.put(url, data=data, headers=header)
+    print("NODE_1>Game time updated in server: " + res.text)
+
+# Update Meta
+def updateMetaGame(game):
+    url = 'https://operating-systems.herokuapp.com/updateMetaDataGame'
+    header = {"content-type": "application/json"}
+    data = json.dumps({"games": game})
+    res = requests.put(url, data=data, headers=header)
+    print("NODE_1>Game meta updated in server: " + res.text)
+
+
 # Clean the games list
 def deleteAllGames():
     url = 'https://operating-systems.herokuapp.com/deleteAllGames'
     res = requests.get(url)
     print("NODE_1>Delete all games in server: " + res.text)
+    return True
 
 
 # Get PS5 games by page
 def parse(page):
     ps5_list = []
-    url = 'https://store.playstation.com/es-cr/category/d71e8e6d-0940-4e03-bd02-404fc7d31a31/' + str(page)
+    url = 'https://store.playstation.com/es-cr/category/d71e8e6d-0940-4e03-bd02-404fc7d31a31/'+str(page)
 
     # Selenium
     options = webdriver.ChromeOptions()
@@ -35,7 +61,7 @@ def parse(page):
         executable_path="../chromedriver", options=options)
     driver.get(url)
 
-    time.sleep(2)
+    time.sleep(3)
 
     games = driver.find_elements_by_xpath('/html/body/div[3]/main/section/div/div/ul/li')
 
@@ -64,7 +90,7 @@ def parse(page):
     driver.close()
     return ps5_list
 
-# 
+# Execution threads, get the data, after that insert in server and give some task to secondary nodes
 def prepare_data(page):
     print("NODE_1>Multiprocessing: Working on Page: " + str(page))
     print("NODE_1>Process: "+str(mp.current_process().name))
@@ -84,7 +110,7 @@ def prepare_data(page):
         client.send()
 
 
-# prepare data to secondary nodes
+# Reduce data to secondary nodes
 def reduce_data(games):
     res = ""
     size = len(games)
@@ -100,7 +126,7 @@ def get_ps5_games_multiprocessing(quantity):
     task = []
     for i in range(1, (quantity + 1)):
         task.append(i)
-    
+
     # Multiprocessing
     pool = mp.Pool(mp.cpu_count())
     pool.map(prepare_data, task)
@@ -111,7 +137,7 @@ def get_ps5_games_secuential(quantity):
     for page in range(1, (quantity + 1)):
         print("NODE_1>Secuential: Working on Page: " + str(page))
         block_games = parse(page)
-        insertAllGames(block_games)
+        res = insertAllGames(block_games)
 
         # Data ready to start to working with Node 1 & 2
         result = reduce_data(block_games)
@@ -127,7 +153,7 @@ def get_ps5_games_secuential(quantity):
 
     print("NODE_1>Secuential: All data Sended!")
 
-# Loop to keep update 
+# Get data depends of process given by main
 def get_data(quantity, multiprocessing, seconds):
     print("\nNODE_1>Update process")
     deleteAllGames()
@@ -135,15 +161,40 @@ def get_data(quantity, multiprocessing, seconds):
         get_ps5_games_multiprocessing(quantity)
     else:
         get_ps5_games_secuential(quantity)
-    
-    #print("NODE_1>Sleep process")
-    #time.sleep(seconds)
-    #get_data(quantity, multiprocessing, seconds)
 
+# Main App
 if __name__ == "__main__":
-    quantity = 4 # Note: quantity = (quantity * 24)
+    quantity = 4  # Note: quantity = (quantity * 24)
     multiprocessing = True
-    seconds = 300 # Seconds wait to refress data
+    seconds = 300  # Seconds wait to refress data
 
     get_data(quantity, multiprocessing, seconds)
     print("NODE_1>Finished all process")
+
+    
+    #TODO: Pass to Node Secundary
+    # Test: Amazon Update
+    
+    """
+    game1 = {
+        "name": "Bugsnax",
+        "price": 1
+    }
+    updateAmazonGame(game1)
+    
+    
+    # Test: Time Update
+    game2 = {
+        "name": "Bugsnax",
+        "time": 420
+    }
+    updateTimeGame(game2)
+    
+    
+    # Test: MetaData Update
+    game3 = {
+        "name": "Bugsnax",
+        "meta": 4
+    }
+    updateMetaGame(game3)
+    """

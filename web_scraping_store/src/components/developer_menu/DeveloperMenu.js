@@ -69,7 +69,7 @@ export default function DeveloperMenu() {
       >
         <StyledMenuItem>
           <ListItemIcon>
-            <GitHubIcon fontSize="small" />
+            <GitHubIcon fontSize="small"/>
           </ListItemIcon>
           <ListItemText primary="Randald V" />
         </StyledMenuItem>

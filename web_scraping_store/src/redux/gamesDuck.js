@@ -26,11 +26,13 @@ export default function gamesReducer(state = initialData, action) {
 //Action to get games's list
 export const getGamesInfoActions = () => async (dispatch, getState) => {
   try {
-    await axios.get(`${process.env.REACT_APP_API_URL}getGames`).then(async (res) => {
+    await axios.get(`${process.env.REACT_APP_API_URL}getGames`)
+    .then(async (res) => {
+      console.log(res.data.array.length);
       dispatch({
         type: GET_GAMES_INFO,
         payload: {
-          array: res.data.data,
+          array: res.data.array,
         },
       });
     });
