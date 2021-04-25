@@ -1,7 +1,6 @@
 import socket, pickle
 import sys
 
-
 class Socket_Client:
     def __init__(self, ip, port, data):
         self.ip = ip
@@ -22,19 +21,6 @@ class Socket_Client:
             sock.sendall(self.data)
             print('NODE_1>Data Sended by sockets')
             
-            """
-            # Look for the response
-            amount_received = 0
-            amount_expected = len(self.data)
-
-            
-            while amount_received < amount_expected:
-                data = sock.recv(2048)
-                amount_received += len(data)
-                print('NODE_1>Received {!r}'.format(data))
-            """
-            sock.close()
-
         finally:
             print('NODE_1>Closing socket')
             sock.close()
