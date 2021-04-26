@@ -8,12 +8,16 @@ CORS(app)
 games = []
 
 # Get Games
+
+
 @app.route("/getGames", methods=['GET'])
 def getGames():
     global games
     return jsonify(games)
 
-# Load from 24 to 24 Games 
+# Load from 24 to 24 Games
+
+
 @app.route("/loadGames", methods=['POST'])
 def loadGames():
     global games
@@ -22,7 +26,9 @@ def loadGames():
         print("SERVER>Quantity of games: " + str(len(games)))
         return jsonify({"status": "ok"})
 
-# Insert 1 Game 
+# Insert 1 Game
+
+
 @app.route("/insertGame", methods=['POST'])
 def insertGames():
     global games
@@ -31,6 +37,8 @@ def insertGames():
         return jsonify({"status": "ok"})
 
 # Delete all games
+
+
 @app.route("/deleteAllGames", methods=['GET'])
 def deleteAllGames():
     global games
@@ -40,6 +48,8 @@ def deleteAllGames():
         return jsonify({"status": "ok"})
 
 # Update Amazon Game
+
+
 @app.route("/updateAmazonGame", methods=['PUT'])
 def updateAmazonGame(name, newItem):
     global games
@@ -50,6 +60,8 @@ def updateAmazonGame(name, newItem):
             return jsonify(games)
 
 # Update Time Game
+
+
 @app.route("/updateTimeGame", methods=['PUT'])
 def updateTimeGame(name, time):
     global games
@@ -59,12 +71,14 @@ def updateTimeGame(name, time):
             return jsonify(games)
 
 # Update MetaData Game
+
+
 @app.route("/updateMetaDataGame", methods=['PUT'])
 def updateMetaDataGame(name, meta):
     global games
     for game in games:
-        if game['name'] == name:
-            game['meta'] = meta
+        if game['name'] == request.json['name']:
+            game['meta'] = request.json['meta']
             return jsonify(games)
 
 

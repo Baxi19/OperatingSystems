@@ -3,7 +3,7 @@ import sys
 import pickle
 import json
 import metascore
-
+import requests
 # it should be in .env
 ip = 'localhost'
 port = 11000
@@ -36,17 +36,20 @@ while True:
                 new_data = pickle.loads(data)
             except EOFError:
                 print("NODE_SECONDARY_2>List Emply")
-            
+
             if data:
                 list_games = new_data.split(sep='\\^')
                 print("NODE_SECONDARY_2>Total: " + str(len(list_games)))
                 for element in list_games:
                     game = element.split(sep='\\~')
                     print("Name: " + game[0] + " ,Price: " + game[1])
-                    game_meta= metascore.meta(game[0])
+                    game_meta = metascore.meta(game[0])
+                    print(game_meta)
+                    requests.put('https://localhost:8888/put',
+                                 data={'name': game[0], 'meta': game_meta})
                 #print('NODE_SECONDARY_2>Sending response to node 1')
                 #connection.sendall(b'Data ready, Im Node Secundary 2')
-                break 
+                break
             else:
                 print('NODE_SECONDARY_2>No data from', client_address)
                 break

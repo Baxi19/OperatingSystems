@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "C:\\Users\\Kevin\\AppData\\Local\\Programs\\Python\\Python39\\python.exe"
+    "python.pythonPath": "C:\\Users\\Kevin\\AppData\\Local\\Programs\\Python\\Python39\\python.exe",
+    "python.formatting.provider": "autopep8"
 }
