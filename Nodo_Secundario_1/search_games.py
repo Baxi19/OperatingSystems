@@ -41,8 +41,13 @@ def search(name, price):
         if ("US$" in price_find == False):
             return False
 
+        # Price in PS wasn't available
+        if ("US$" in price == True):
+            price = price.split("US$")[1]
+        else: 
+            pass
+
         price_find = price_find.split("US$\xa0")[1]
-        price = price.split("US$")[1]
         return compare_price(price, price_find)
 
 def compare_price(actual_price, price_find):
@@ -57,12 +62,4 @@ def updateAmazonGame(game):
     header = {"content-type": "application/json"}
     data = json.dumps({"games": game})
     res = requests.put(url, data=data, headers=header)
-    print("NODE_SECONDARY_1>Game price updated in server: " + res.text)
-
-"""
-game1 = {
-    "name": "Bugsnax",
-    "price": 1
-}
-updateAmazonGame(game1)
-"""
+    print("NODE_SECONDARY_1>Game price updated in server: " + res.text + "Game: " + game["name"])
