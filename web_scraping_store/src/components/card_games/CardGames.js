@@ -31,7 +31,7 @@ const CardGames = React.forwardRef((props, ref) => {
             title="Contemplative Reptile"
           />
           <CardContent>
-            <Rating name="read-only" value={5} readOnly /> {/*TODO: Set metadata in value*/}
+            <Rating name="read-only" value={props.item["meta"]} readOnly /> {/*TODO: Set metadata in value*/}
             <Typography gutterBottom variant="h5" component="h2">
               {`${props.item["name"]}`}
             </Typography>
