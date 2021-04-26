@@ -20,7 +20,11 @@ class Socket_Client:
             # Send data
             sock.sendall(self.data)
             print('NODE_1>Data Sended by sockets')
-            
+
+            # Look for the response
+            data = sock.recv(2048)
+            print('NODE_1>Received {!r}'.format(data))
+
         finally:
             print('NODE_1>Closing socket')
             sock.close()
