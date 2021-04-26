@@ -2,7 +2,15 @@ import socket
 import sys
 import pickle
 import json
+import requests
 
+# Update Meta
+def updateMetaGame(game):
+    url = 'https://operating-systems.herokuapp.com/updateMetaDataGame'
+    header = {"content-type": "application/json"}
+    data = json.dumps({"games": game})
+    res = requests.put(url, data=data, headers=header)
+    print("NODE_SECONDARY_2>Game meta updated in server: " + res.text)
 
 # it should be in .env
 ip = 'localhost'
@@ -45,8 +53,15 @@ while True:
                     print("Name: " + game[0] + " ,Price: " + game[1])
                     # YOUR CODE HERE!!!!
 
-                #print('NODE_SECONDARY_2>Sending response to node 1')
-                #connection.sendall(b'Data ready, Im Node Secundary 2')
+                    #TODO: Metadata 
+                    game = {
+                        "name": game[0],
+                        "meta": 4
+                    }
+                    updateMetaGame(game)
+
+                print('NODE_SECONDARY_2>Sending response to node 1')
+                connection.sendall(b'Data ready, Im Node Secundary 2')
                 break 
             else:
                 print('NODE_SECONDARY_2>No data from', client_address)

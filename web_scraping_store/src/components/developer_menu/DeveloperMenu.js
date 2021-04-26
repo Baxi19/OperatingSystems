@@ -68,22 +68,22 @@ export default function DeveloperMenu() {
         onClose={handleClose}
       >
         <StyledMenuItem>
-          <ListItemIcon>
+          <ListItemIcon >
             <GitHubIcon fontSize="small"/>
           </ListItemIcon>
-          <ListItemText primary="Randald V" />
+          <ListItemText primary="Randald V" onClick={() => window.open("https://github.com/Baxi19")}/>
         </StyledMenuItem>
         <StyledMenuItem>
           <ListItemIcon>
             <GitHubIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Jazmine E" />
+          <ListItemText primary="Jazmine E" onClick={() => window.open("https://github.com/JazmineEP")}/>
         </StyledMenuItem>
         <StyledMenuItem>
           <ListItemIcon>
             <GitHubIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText primary="Kevin D" />
+          <ListItemText primary="Kevin D" onClick={() => window.open("https://github.com/Kevin-DCA")}/>
         </StyledMenuItem>
       </StyledMenu>
     </div>

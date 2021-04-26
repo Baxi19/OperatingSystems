@@ -7,13 +7,15 @@ from socket_client import Socket_Client
 import json
 import pickle
 
+global list_games
+
 # Insertion at server from 24 to 24 games
 def insertAllGames(games):
     url = 'https://operating-systems.herokuapp.com/loadGames'
     header = {"content-type": "application/json"}
     data = json.dumps({'array': games})
     res = requests.post(url, data=data, headers=header, verify=False)
-    print("NODE_1>Games inserted in server: " + res.text)
+    print("NODE_1>Games inserted in server by :"+str(mp.current_process().name) + " => "+res.text)
 
 # Update Amazon price
 def updateAmazonGame(game):
@@ -102,13 +104,13 @@ def prepare_data(page):
     data = pickle.dumps(result)
 
     # Send by sockets
-    if page % 2 == 0:
-        client2 = Socket_Client("localhost", 11000, data)
-        client2.send()
-    else:
-        client = Socket_Client("localhost", 10000, data)
-        client.send()
+    client = Socket_Client("localhost", 10000, data)
+    client.send()
+    
+    client2 = Socket_Client("localhost", 11000, data)
+    client2.send()
 
+    
 
 # Reduce data to secondary nodes
 def reduce_data(games):
@@ -122,59 +124,30 @@ def reduce_data(games):
 
 
 # Get range of games Multiprocessing
-def get_ps5_games_multiprocessing(quantity):
-    task = []
-    for i in range(1, (quantity + 1)):
-        task.append(i)
+def get_ps5_games_multiprocessing(task):
 
+    # TODO:
     # Multiprocessing
     pool = mp.Pool(mp.cpu_count())
     pool.map(prepare_data, task)
     print("NODE_1>Multiprocessing: All data Sended!")
 
-# Get range of games secuential
-def get_ps5_games_secuential(quantity):
-    for page in range(1, (quantity + 1)):
-        print("NODE_1>Secuential: Working on Page: " + str(page))
-        block_games = parse(page)
-        res = insertAllGames(block_games)
 
-        # Data ready to start to working with Node 1 & 2
-        result = reduce_data(block_games)
-        data = pickle.dumps(result)
-
-        # Send by sockets
-        if page % 2 == 0:
-            client2 = Socket_Client("localhost", 11000, data)
-            client2.send()
-        else:
-            client = Socket_Client("localhost", 10000, data)
-            client.send()
-
-    print("NODE_1>Secuential: All data Sended!")
-
-# Get data depends of process given by main
-def get_data(quantity, multiprocessing, seconds):
-    print("\nNODE_1>Update process")
-    deleteAllGames()
-    if multiprocessing:
-        get_ps5_games_multiprocessing(quantity)
-    else:
-        get_ps5_games_secuential(quantity)
 
 # Main App
 if __name__ == "__main__":
-    quantity = 4  # Note: quantity = (quantity * 24)
-    multiprocessing = True
-    seconds = 300  # Seconds wait to refress data
+    deleteAllGames()
+    list_games = []
 
-    get_data(quantity, multiprocessing, seconds)
+    quantity = 4  # Note: quantity = (quantity * 24)
+    task = []
+    for i in range(1, (quantity + 1)):
+        task.append(i)
+    
+    get_ps5_games_multiprocessing(task)
+    time.sleep(300)
     print("NODE_1>Finished all process")
 
-    
-    #TODO: Pass to Node Secundary
-    # Test: Amazon Update
-    
     """
     game1 = {
         "name": "Bugsnax",
