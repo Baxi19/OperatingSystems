@@ -3,7 +3,7 @@ import sys
 import pickle
 import json
 import requests
-
+import metascore
 # Update Meta
 def updateMetaGame(game):
     url = 'https://operating-systems.herokuapp.com/updateMetaDataGame'
