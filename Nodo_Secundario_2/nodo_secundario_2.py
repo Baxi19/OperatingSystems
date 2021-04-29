@@ -53,6 +53,7 @@ while True:
                     print("Name: " + game[0] + " ,Price: " + game[1])
                     # YOUR CODE HERE!!!!
                     meta_s=metascore.meta(game[0])
+                    howlog=metascore.how_long_beat(game[0])
                     #TODO: Metadata 
                     game = {
                         "name": game[0],

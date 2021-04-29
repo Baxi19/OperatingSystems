@@ -6,8 +6,8 @@ def print_resource_data(resource):
     print("Name: " + resource.name)
     print("Metascore: " + str(resource.metascore))
 
-def how_long_beat():
-    results_list = HowLongToBeat().search("gears")
+def how_long_beat( name):
+    results_list = HowLongToBeat().search(name)
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         #print(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
