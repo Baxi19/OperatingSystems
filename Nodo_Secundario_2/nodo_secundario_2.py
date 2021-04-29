@@ -3,7 +3,7 @@ import sys
 import pickle
 import json
 import requests
-
+import metascore
 # Update Meta
 def updateMetaGame(game):
     url = 'https://operating-systems.herokuapp.com/updateMetaDataGame'
@@ -52,11 +52,11 @@ while True:
                     game = element.split(sep='\\~')
                     print("Name: " + game[0] + " ,Price: " + game[1])
                     # YOUR CODE HERE!!!!
-
+                    meta_s=metascore.meta(game[0])
                     #TODO: Metadata 
                     game = {
                         "name": game[0],
-                        "meta": 4
+                        "meta": meta_s.metascore
                     }
                     updateMetaGame(game)
 
