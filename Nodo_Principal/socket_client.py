@@ -6,6 +6,10 @@ class Socket_Client:
         self.ip = ip
         self.port = port
         self.data = data
+        self.res = ""
+    
+    def result(self):
+        return self.res
 
     def send(self):
         # Create a TCP/IP socket
@@ -22,9 +26,8 @@ class Socket_Client:
             print('NODE_1>Data Sended by sockets')
 
             # Look for the response
-            data = sock.recv(2048)
-            print('NODE_1>Received {!r}'.format(data))
-
+            self.res = pickle.loads(sock.recv(8192))
+            
         finally:
             print('NODE_1>Closing socket')
             sock.close()

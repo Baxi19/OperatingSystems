@@ -27,95 +27,32 @@ def getGames():
     global games
     return jsonify({"size":len(games) ,"array": games})
 
-
-# /loadGames
-def add_24(games_list):
-    global games
-    caller = inspect.getouterframes(inspect.currentframe())[1][3]
-    print ("Inside %s()" % caller)
-    print ("Acquiring lock")
-    with lock:
-        print ("Lock Acquired")
-        games.extend(games_list)
-
-
-# Load from 24 to 24 Games 
-@app.route("/loadGames", methods=['POST'])
-def loadGames():
-    global games
-    if request.method == 'POST':
-        add = Thread(add_24(request.json['array']))
-        return jsonify({"status": "ok", "size": len(games)})
-
-
-# Delete all games
-@app.route("/deleteAllGames", methods=['GET'])
-def deleteAllGames():
+# Delete all
+@app.route("/delete", methods=['GET'])
+def delete():
     global games
     if request.method == 'GET':
         games = []
         return jsonify({"array": games, "size": len(games)})
 
-
-# /updateAmazonGame
-def updateAmazon(data):
+# /games
+def add(games_list):
     global games
     caller = inspect.getouterframes(inspect.currentframe())[1][3]
     print ("Inside %s()" % caller)
     print ("Acquiring lock")
     with lock:
         print ("Lock Acquired")
-        for game in games:
-            if game['name'] == data['name']:
-                game['price'] = data['price']
-                game['store'] = "Amazon"
-        
+        games=games_list
 
-# Update Amazon Game
-@app.route("/updateAmazonGame", methods=['PUT'])
-def updateAmazonGame():
-    update = Thread(updateAmazon(request.json['games']))
+
+# Load all Games 
+@app.route("/games", methods=['POST'])
+def games():
     global games
-    return jsonify({"status": "ok", "size": len(games)})
-
-# /updateTimeGame
-def updateTime(data):
-    global games
-    caller = inspect.getouterframes(inspect.currentframe())[1][3]
-    print ("Inside %s()" % caller)
-    print ("Acquiring lock")
-    with lock:
-        print ("Lock Acquired")
-        for game in games:
-            if game['name'] == data['name']:
-                game['time'] = data['time']
-
-# Update Time Game
-@app.route("/updateTimeGame", methods=['PUT'])
-def updateTimeGame():
-    update = Thread(updateTime(request.json['games']))
-    global games
-    return jsonify({"status": "ok", "size": len(games)})
-
-
-# /updateMetaDataGame
-def updateMeta(data):
-    global games
-    caller = inspect.getouterframes(inspect.currentframe())[1][3]
-    print ("Inside %s()" % caller)
-    print ("Acquiring lock")
-    with lock:
-        print ("Lock Acquired")
-        for game in games:
-            if game['name'] == data['name']:
-                game['meta'] = data['meta']
-
-# Update MetaData Game
-@app.route("/updateMetaDataGame", methods=['PUT'])
-def updateMetaDataGame():
-    update = Thread(updateMeta(request.json['games']))
-    global games
-    return jsonify({"status": "ok", "size": len(games)})
+    if request.method == 'POST':
+        req = Thread(add(request.json['array']))
+        return jsonify({"status": "ok", "size": len(games)})
 
 
 if __name__ == "__main__":

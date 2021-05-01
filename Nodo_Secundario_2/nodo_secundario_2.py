@@ -4,14 +4,6 @@ import pickle
 import json
 import requests
 
-# Update Meta
-def updateMetaGame(game):
-    url = 'https://operating-systems.herokuapp.com/updateMetaDataGame'
-    header = {"content-type": "application/json"}
-    data = json.dumps({"games": game})
-    res = requests.put(url, data=data, headers=header)
-    print("NODE_SECONDARY_2>Game meta updated in server: " + res.text)
-
 # it should be in .env
 ip = 'localhost'
 port = 11000
@@ -37,7 +29,7 @@ while True:
 
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(2048)
+            data = connection.recv(8192)
             new_data = []
 
             try:
@@ -46,22 +38,15 @@ while True:
                 print("NODE_SECONDARY_2>List Emply")
             
             if data:
-                list_games = new_data.split(sep='\\^')
-                print("NODE_SECONDARY_2>Total: " + str(len(list_games)))
-                for element in list_games:
-                    game = element.split(sep='\\~')
-                    print("Name: " + game[0] + " ,Price: " + game[1])
-                    # YOUR CODE HERE!!!!
+                #TODO: insert your code here
+                for i  in new_data:
+                    i['time'] = "1h"
+                    i['meta'] = 5
 
-                    #TODO: Metadata 
-                    game = {
-                        "name": game[0],
-                        "meta": 4
-                    }
-                    updateMetaGame(game)
 
                 print('NODE_SECONDARY_2>Sending response to node 1')
-                connection.sendall(b'Data ready, Im Node Secundary 2')
+                res = pickle.dumps(new_data)
+                connection.sendall(res)
                 break 
             else:
                 print('NODE_SECONDARY_2>No data from', client_address)
