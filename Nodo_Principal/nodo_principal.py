@@ -7,6 +7,7 @@ import json
 import requests
 
 # Clean the games list
+# TODO:If you are using the local server you should change the url by  flash server url
 def deleteAllGames():
     url = 'https://operating-systems.herokuapp.com/delete'
     res = requests.get(url)
@@ -14,6 +15,7 @@ def deleteAllGames():
     return True
 
 # PS5
+# TODO:If you are using the local server you should change the url by  flash server url
 def insertAllGames(games):
     url = 'https://operating-systems.herokuapp.com/games'
     header = {"content-type": "application/json"}

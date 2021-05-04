@@ -2,7 +2,8 @@ import socket
 import sys
 import pickle
 import json
-import requests
+from search_games import search
+
 
 # it should be in .env
 ip = 'localhost'
@@ -40,8 +41,10 @@ while True:
             if data:
                 #TODO: insert your code here
                 for i  in new_data:
-                    i['price'] = "100"
-                    i['store'] = "Amazon"
+                    best_price = search(i['name'], i['price'])
+                    if (best_price != False):
+                        i['price'] = "US$"+best_price
+                        i['store'] = "Amazon"
 
                 
                 print('NODE_SECONDARY_1>Sending response to node 1')
