@@ -28,6 +28,7 @@ class Socket_Client:
             # Look for the response
             self.res = pickle.loads(sock.recv(8192))
             
+            
         finally:
             print('NODE_1>Closing socket')
             sock.close()

@@ -40,6 +40,8 @@ while True:
             if data:
                 #TODO: insert your code here
                 for i  in new_data:
+                    
+                    #TODO: Only to test
                     i['time'] = "1h"
                     i['meta'] = 5
 

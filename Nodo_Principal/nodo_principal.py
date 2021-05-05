@@ -24,8 +24,9 @@ def insertAllGames(games):
     print("NODE_1>Games inserted in server  => "+res.text)
 
 
+
 # Task to get first info
-def task(i, l):
+def task(i, shared_list):
     print("NODE_1>Hilo {0} - Inicio su trabajo".format(i))
     array = []
     url = 'https://store.playstation.com/es-cr/category/d71e8e6d-0940-4e03-bd02-404fc7d31a31/'+str(i)
@@ -76,7 +77,6 @@ def task(i, l):
             "time": "",
             "meta": ""
         }
-        #l.append(newGame)
         array.append(newGame)
         id_game += 1
 
@@ -85,10 +85,12 @@ def task(i, l):
 
     # Send by sockets
     client = Socket_Client("localhost", 10000, data)
+    #client = Socket_Client("192.168.0.3", 10000, data)
     client.send()
     data_node1 = client.result()
     
     client2 = Socket_Client("localhost", 11000, data)
+    #client2 = Socket_Client("192.168.0.3", 11000, data)
     client2.send()
     data_node2 =client2.result()
 
@@ -99,19 +101,19 @@ def task(i, l):
                 node2['price'] = node1['price']
                 node2['store'] = node1['store']
     
-    l.extend(data_node2)
+    shared_list.extend(data_node2)
     print("NODE_1>Hilo {0} - Fin de su trabajo".format(i))
 
 
 def main(quantity):
     with Manager() as manager:
-        l = manager.list()
+        shared_list = manager.list()
 
         # Pool
         piscina = []
         for i in range(1, (quantity+1)):
             print("NODE_1>PADRE: creando Hilo {0}".format(i))
-            piscina.append(Process(target=task, args=(i, l)))
+            piscina.append(Process(target=task, args=(i, shared_list)))
 
         # Start
         print("NODE_1>PADRE: arrancando hilos")
@@ -127,7 +129,7 @@ def main(quantity):
                     del(proceso)
 
         print("NODE_1>Fin del trabajo de los hilos")
-        insertAllGames(list(l))
+        insertAllGames(list(shared_list))
         
 if __name__ == "__main__":
     deleteAllGames()
