@@ -104,8 +104,8 @@ def prepare_data(page):
     data = pickle.dumps(result)
 
     # Send by sockets
-    client = Socket_Client("localhost", 10000, data)
-    client.send()
+    #client = Socket_Client("localhost", 10000, data)
+    #client.send()
     
     client2 = Socket_Client("localhost", 11000, data)
     client2.send()

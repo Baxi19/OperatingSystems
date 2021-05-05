@@ -50,7 +50,7 @@ while True:
                 print("NODE_SECONDARY_2>Total: " + str(len(list_games)))
                 for element in list_games:
                     game = element.split(sep='\\~')
-                    print("Name: " + game[0] + " ,Price: " + game[1])
+                   # print("Name: " + game[0] + " ,Price: " + game[1])
                     # YOUR CODE HERE!!!!
                     meta_s=metascore.meta(game[0])
                     howlog=metascore.how_long_beat(game[0])
@@ -59,6 +59,7 @@ while True:
                         "name": game[0],
                         "meta": meta_s.metascore
                     }
+                    print(game)
                     updateMetaGame(game)
 
                 print('NODE_SECONDARY_2>Sending response to node 1')

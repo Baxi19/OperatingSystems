@@ -10,7 +10,7 @@ def how_long_beat( name):
     results_list = HowLongToBeat().search(name)
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
-        #print(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
+        print(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
         return(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
 def format_result(time_to_beat):
     half_index = time_to_beat.find('½')               # Retorna el índice donde se encuentra el caracter '½'
@@ -48,7 +48,6 @@ class Query(object):
             return auxurl
         else:
             urlf = "http://www.metacritic.com"+scra.search(self.url)
-            print(urlf)
             return urlf
 
 # This class represents a generic resource found at Metacritic

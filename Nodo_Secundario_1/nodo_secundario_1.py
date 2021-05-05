@@ -2,15 +2,8 @@ import socket
 import sys
 import pickle
 import json
-import requests
-
-# Update Amazon price
-def updateAmazonGame(game):
-    url = 'https://operating-systems.herokuapp.com/updateAmazonGame'
-    header = {"content-type": "application/json"}
-    data = json.dumps({"games": game})
-    res = requests.put(url, data=data, headers=header)
-    print("NODE_SECONDARY_1>Game price updated in server: " + res.text)
+from search_games import search
+from search_games import updateAmazonGame
 
 # it should be in .env
 ip = 'localhost'
@@ -50,20 +43,20 @@ while True:
                 print("NODE_SECONDARY_1>Total: " + str(len(list_games)))
                 for element in list_games:
                     game = element.split(sep='\\~')
-                    print("Name: " + game[0] + " ,Price: " + game[1])
-                    # YOUR CODE HERE!!!!
+                    print("Name: " + game[0] + ", Price: " + game[1])
+                    # Find the best price
+                    best_price = search(game[0], game[1])
 
-                    # TODO: Amazon price   
-                    game = {
-                        "name": game[0],
-                        "price": 420
-                    }
-                    updateAmazonGame(game)  
-
-
-                print('NODE_SECONDARY_1>Sending response to node 1')
-                connection.sendall(b'Data ready, Im Node Secundary 1')
-                break 
+                    if (best_price != False):
+                        gameUpdate = {
+                            "name": game[0],
+                            "price": "US$"+best_price
+                        }
+                        updateAmazonGame(gameUpdate)
+                    
+                #print('NODE_SECONDARY_1>Sending response to node 1')
+                #connection.sendall(b'Data ready, Im Node Secundary 1')
+                break
             else:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break
