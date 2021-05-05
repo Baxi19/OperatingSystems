@@ -3,7 +3,7 @@ import sys
 import pickle
 import json
 import requests
-
+import metascore
 # it should be in .env
 ip = 'localhost'
 port = 11000
@@ -42,8 +42,8 @@ while True:
                 for i  in new_data:
                     
                     #TODO: Only to test
-                    i['time'] = "1h"
-                    i['meta'] = 5
+                    i['time'] = metascore.how_long_beat(i["name"])
+                    i['meta'] = metascore.meta(i["name"])
 
 
                 print('NODE_SECONDARY_2>Sending response to node 1')
