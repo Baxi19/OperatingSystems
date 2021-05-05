@@ -1,6 +1,8 @@
 import socket
 import sys
-
+import pickle
+import json
+import requests
 
 # it should be in .env
 ip = 'localhost'
@@ -20,20 +22,34 @@ sock.listen(connections)
 
 while True:
     # Wait for a connection
-    print('NODE_SECONDARY_2>Waiting for a connection')
+    print('\nNODE_SECONDARY_2>Waiting for a connection')
     connection, client_address = sock.accept()
     try:
         print('NODE_SECONDARY_2>Connection from', client_address)
 
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(1024)
-            print('NODE_SECONDARY_2>Received {!r}'.format(data))
+            data = connection.recv(8192)
+            new_data = []
+
+            try:
+                new_data = pickle.loads(data)
+            except EOFError:
+                print("NODE_SECONDARY_2>List Emply")
+            
             if data:
-                # YOUR CODE HERE!!!!
+                #TODO: insert your code here
+                for i  in new_data:
+                    
+                    #TODO: Only to test
+                    i['time'] = "1h"
+                    i['meta'] = 5
+
 
                 print('NODE_SECONDARY_2>Sending response to node 1')
-                connection.sendall(b'Hello, Im Node Secundary 2')
+                res = pickle.dumps(new_data)
+                connection.sendall(res)
+                break 
             else:
                 print('NODE_SECONDARY_2>No data from', client_address)
                 break

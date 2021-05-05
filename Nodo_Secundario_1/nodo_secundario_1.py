@@ -1,11 +1,14 @@
-import socket, pickle
+import socket
 import sys
+import pickle
+import json
+from search_games import search
 
 
 # it should be in .env
 ip = 'localhost'
 port = 10000
-connections = 5
+connections = 10
 
 # Create a TCP/IP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,34 +23,42 @@ sock.listen(connections)
 
 while True:
     # Wait for a connection
-    print('NODE_SECONDARY_1>Waiting for a connection')
+    print('\nNODE_SECONDARY_1>Waiting for a connection')
     connection, client_address = sock.accept()
     try:
         print('NODE_SECONDARY_1>Connection from', client_address)
 
-        """
-        while 1:
-            data = connection.recv(4096)
-            if not data: break
-            connection.send(data)
-        print("Recibido: ")
-        """
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(4096)
-            print('NODE_SECONDARY_1>Received {!r}'.format(data))
-            if data:
-                # YOUR CODE HERE!!!!
-                # data_arr = pickle.loads(data)
-                # print(repr(data_arr))
+            data = connection.recv(8192)
+            new_data = []
 
+            try:
+                new_data = pickle.loads(data)
+            except EOFError:
+                print("NODE_SECONDARY_1>List Emply")
+
+            if data:
+                #TODO: insert your code here
+                for i  in new_data:
+                    """
+                    #TODO: Check method
+                    best_price = search(i['name'], i['price'])
+                    if (best_price != False):
+                        i['price'] = "US$"+best_price
+                        i['store'] = "Amazon"
+                    """
+                    #TODO: Only to test
+                    i['price'] = "US$0.99"
+                    i['store'] = "Amazon"
+                
                 print('NODE_SECONDARY_1>Sending response to node 1')
-                connection.sendall(b'Hello, Im Node Secundary 1')
+                res = pickle.dumps(new_data)
+                connection.sendall(res)
+                break 
             else:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break
-        
-
 
     finally:
         # Clean up the connection
