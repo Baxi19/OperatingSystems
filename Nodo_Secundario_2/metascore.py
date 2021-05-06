@@ -11,7 +11,8 @@ def how_long_beat( name):
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         #print(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
-        return(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
+        return(format_result(str(best_element.gameplay_completionist)))
+        
 def format_result(time_to_beat):
     half_index = time_to_beat.find('½')               # Retorna el índice donde se encuentra el caracter '½'
     if half_index != -1:                              # Si el caracter '½' existe en el string...
@@ -24,12 +25,12 @@ def meta(name):
     if(url == "mal"):
         game = Resource(name, 5)
         
-        return game
+        return game.metascore
     else:
         game = scraper.get(url)
         game.metascore = round(game.metascore/20)
         #print_resource_data(game)
-        return game
+        return game.metascore
 
 
 # Contains info about the query to be made

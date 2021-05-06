@@ -20,30 +20,22 @@ def insertAllGames(games):
     url = 'https://operating-systems.herokuapp.com/games'
     header = {"content-type": "application/json"}
     data = json.dumps({'array': games})
-    res = requests.post(url, data=data, headers=header, verify=False)
+    res = requests.post(url, data=data, headers=header)
     print("NODE_1>Games inserted in server  => "+res.text)
-
-
 
 # Task to get first info
 def task(i, shared_list):
     print("NODE_1>Hilo {0} - Inicio su trabajo".format(i))
     array = []
     url = 'https://store.playstation.com/es-cr/category/d71e8e6d-0940-4e03-bd02-404fc7d31a31/'+str(i)
-    id_game = 0
-    if(i == 2):
-        id_game = 25 
-    elif(i == 3):
-        id_game = 49
-    elif(i == 4):
-        id_game = 73
-    else:
-        id_game = i
-        
-
+    id_game = ((i-1)*24)+1
+    
     # Selenium
     options = webdriver.ChromeOptions()
     options.add_argument('--incognito')
+    options.add_argument('headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    
 
     driver = webdriver.Chrome(
         executable_path="../chromedriver", options=options)
@@ -112,15 +104,15 @@ def main(quantity):
         # Pool
         piscina = []
         for i in range(1, (quantity+1)):
-            print("NODE_1>PADRE: creando Hilo {0}".format(i))
+            print("NODE_1>Creando Hilo {0}".format(i))
             piscina.append(Process(target=task, args=(i, shared_list)))
 
         # Start
-        print("NODE_1>PADRE: arrancando hilos")
+        print("NODE_1>Arrancando hilos")
         for proceso in piscina:
             proceso.start()
 
-        print("NODE_1>PADRE: esperando a que los procesos hagan su trabajo")
+        print("NODE_1>Esperando a que los procesos hagan su trabajo")
         while piscina:
             for proceso in piscina:
                 if not proceso.is_alive():
