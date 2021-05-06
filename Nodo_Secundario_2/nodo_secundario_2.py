@@ -2,8 +2,9 @@ import socket
 import sys
 import pickle
 import json
-import requests
+#import requests
 import metascore
+
 # it should be in .env
 ip = 'localhost'
 port = 11000
@@ -36,20 +37,21 @@ while True:
                 new_data = pickle.loads(data)
             except EOFError:
                 print("NODE_SECONDARY_2>List Emply")
-            
+
             if data:
-                #TODO: insert your code here
-                for i  in new_data:
-                    
-                    #TODO: Only to test
+                # TODO: insert your code here
+                for i in new_data:
+
+                    # TODO: Only to test
                     i['time'] = metascore.how_long_beat(i["name"])
                     i['meta'] = metascore.meta(i["name"])
-
+                    #i['time'] = "1"
+                    #i['meta'] = "4"
 
                 print('NODE_SECONDARY_2>Sending response to node 1')
                 res = pickle.dumps(new_data)
                 connection.sendall(res)
-                break 
+                break
             else:
                 print('NODE_SECONDARY_2>No data from', client_address)
                 break
