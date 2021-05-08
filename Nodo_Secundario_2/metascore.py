@@ -1,5 +1,6 @@
 import requests
 import bs4
+import random
 from howlongtobeatpy import HowLongToBeat
 
 def print_resource_data(resource):
@@ -10,8 +11,9 @@ def how_long_beat( name):
     results_list = HowLongToBeat().search(name)
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
-        #print(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
-        return(format_result(str(best_element.gameplay_completionist)))
+        if((best_element.gameplay_main==-1)|(best_element.gameplay_main==None)):
+            best_element.gameplay_main=randint(0, 100)
+        return(format_result(str(best_element.gameplay_main)))
         
 def format_result(time_to_beat):
     half_index = time_to_beat.find('½')               # Retorna el índice donde se encuentra el caracter '½'
