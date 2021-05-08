@@ -3,7 +3,6 @@ import sys
 import pickle
 import json
 from search_games import search
-from search_games import updateAmazonGame
 
 # it should be in .env
 ip = 'localhost'
@@ -30,7 +29,7 @@ while True:
 
         # Receive the data in small chunks and retransmit it
         while True:
-            data = connection.recv(2048)
+            data = connection.recv(8192)
             new_data = []
 
             try:
@@ -39,24 +38,18 @@ while True:
                 print("NODE_SECONDARY_1>List Emply")
 
             if data:
-                list_games = new_data.split(sep='\\^')
-                print("NODE_SECONDARY_1>Total: " + str(len(list_games)))
-                for element in list_games:
-                    game = element.split(sep='\\~')
-                    print("Name: " + game[0] + ", Price: " + game[1])
-                    # Find the best price
-                    best_price = search(game[0], game[1])
-
+                #TODO: Find the best price
+                for i  in new_data:
+                
+                    best_price = search(i['name'], i['price'])
                     if (best_price != False):
-                        gameUpdate = {
-                            "name": game[0],
-                            "price": "US$"+best_price
-                        }
-                        updateAmazonGame(gameUpdate)
-                    
-                #print('NODE_SECONDARY_1>Sending response to node 1')
-                #connection.sendall(b'Data ready, Im Node Secundary 1')
-                break
+                        i['price'] = "US$"+best_price
+                        i['store'] = "Amazon"
+                
+                print('NODE_SECONDARY_1>Sending response to node 1')
+                res = pickle.dumps(new_data)
+                connection.sendall(res)
+                break 
             else:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break

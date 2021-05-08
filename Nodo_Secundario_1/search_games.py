@@ -1,4 +1,3 @@
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 import time
@@ -55,11 +54,3 @@ def compare_price(actual_price, price_find):
         return False
     else:
         return price_find
-
-# Update Amazon price
-def updateAmazonGame(game):
-    url = 'https://operating-systems.herokuapp.com/updateAmazonGame'
-    header = {"content-type": "application/json"}
-    data = json.dumps({"games": game})
-    res = requests.put(url, data=data, headers=header)
-    print("NODE_SECONDARY_1>Game price updated in server: " + res.text + "Game: " + game["name"])

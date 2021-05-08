@@ -1,17 +1,18 @@
 import requests
 import bs4
-
+from howlongtobeatpy import HowLongToBeat
 
 def print_resource_data(resource):
     print("Name: " + resource.name)
     print("Metascore: " + str(resource.metascore))
 
-def how_long_beat():
-    results_list = HowLongToBeat().search("gears")
+def how_long_beat( name):
+    results_list = HowLongToBeat().search(name)
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         #print(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
-        return(format_result(best_element.gameplay_completionist)+" "+best_element.gameplay_completionist_unit)
+        return(format_result(str(best_element.gameplay_completionist)))
+        
 def format_result(time_to_beat):
     half_index = time_to_beat.find('½')               # Retorna el índice donde se encuentra el caracter '½'
     if half_index != -1:                              # Si el caracter '½' existe en el string...
@@ -24,12 +25,12 @@ def meta(name):
     if(url == "mal"):
         game = Resource(name, 5)
         
-        return game
+        return game.metascore
     else:
         game = scraper.get(url)
         game.metascore = round(game.metascore/20)
-        print_resource_data(game)
-        return game
+        #print_resource_data(game)
+        return game.metascore
 
 
 # Contains info about the query to be made
@@ -135,7 +136,11 @@ class Scraper(object):
 
     def _extract_metascore(self):
         section = self.soup.select(".metascore_wrap")[0]
+        try:
 
-        score = section.select(".metascore_w")[0].text
+            score = section.select(".metascore_w")[0].text
+            return int(score)
+        except:
+            return 100
 
-        return int(score)
+        
