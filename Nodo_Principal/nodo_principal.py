@@ -25,7 +25,7 @@ def insertAllGames(games):
 
 # Task to get first info
 def task(i, shared_list):
-    print("NODE_1>Hilo {0} - Inicio su trabajo".format(i))
+    print("NODE_1>Process {0} - Start your job".format(i))
     array = []
     url = 'https://store.playstation.com/es-cr/category/d71e8e6d-0940-4e03-bd02-404fc7d31a31/'+str(i)
     id_game = ((i-1)*24)+1
@@ -76,13 +76,13 @@ def task(i, shared_list):
     data = pickle.dumps(array)
 
     # Send by sockets
-    client = Socket_Client("localhost", 10000, data)
     #client = Socket_Client("192.168.0.3", 10000, data)
+    client = Socket_Client("localhost", 10000, data)
     client.send()
     data_node1 = client.result()
     
-    client2 = Socket_Client("localhost", 11000, data)
     #client2 = Socket_Client("192.168.0.3", 11000, data)
+    client2 = Socket_Client("localhost", 11000, data)
     client2.send()
     data_node2 =client2.result()
 
@@ -94,25 +94,25 @@ def task(i, shared_list):
                 node2['store'] = node1['store']
     
     shared_list.extend(data_node2)
-    print("NODE_1>Hilo {0} - Fin de su trabajo".format(i))
+    print("NODE_1>Process {0} - End of your job".format(i))
 
 
-def main(quantity):
+def run(quantity):
     with Manager() as manager:
         shared_list = manager.list()
 
         # Pool
         piscina = []
         for i in range(1, (quantity+1)):
-            print("NODE_1>Creando Hilo {0}".format(i))
+            print("NODE_1>New Process {0}".format(i))
             piscina.append(Process(target=task, args=(i, shared_list)))
 
         # Start
-        print("NODE_1>Arrancando hilos")
+        print("NODE_1>Starting Process")
         for proceso in piscina:
             proceso.start()
 
-        print("NODE_1>Esperando a que los procesos hagan su trabajo")
+        print("NODE_1>Waiting for the Process to finish their work")
         while piscina:
             for proceso in piscina:
                 if not proceso.is_alive():
@@ -120,11 +120,11 @@ def main(quantity):
                     piscina.remove(proceso)
                     del(proceso)
 
-        print("NODE_1>Fin del trabajo de los hilos")
+        print("NODE_1>End of Process work")
         insertAllGames(list(shared_list))
         
 if __name__ == "__main__":
     deleteAllGames()
     quantity = 4  # Note: quantity = (quantity * 24)
-    main(quantity)
-    print("NODE_1>Fin")
+    run(quantity)
+    print("NODE_1>End")

@@ -3,6 +3,33 @@ import sys
 import pickle
 import json
 import metascore
+import random
+import threading
+
+
+class myThread (threading.Thread):
+    def __init__(self, threadID, name, game):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.game = game
+    def run(self):
+        print("NODE_SECONDARY_2>Starting Thread: " + self.name)
+        threadLock.acquire() # Get lock to synchronize threads
+        task(self.game)
+        threadLock.release() # Free lock to release next thread
+
+
+# Task to get first info
+def task(i):
+    time = metascore.how_long_beat(i["name"])
+    if time is None:
+        i['time'] = random.randint(3, 8)    
+    else:
+        i['time'] = time
+    i['meta'] = metascore.meta(i["name"])
+    pass
+
 
 # it should be in .env
 ip = 'localhost'
@@ -38,14 +65,24 @@ while True:
                 print("NODE_SECONDARY_2>List Emply")
 
             if data:
-                # TODO: insert your code here
+                threadLock = threading.Lock()
+                piscina = [] # Pool
+                
                 for i in new_data:
+                    print("NODE_SECONDARY_2>New Thread id: " + i['id'])
+                    piscina.append(myThread(i['id'], i['name'], i))
+            
+                # Start
+                print("NODE_SECONDARY_2>Starting threads")
+                for proceso in piscina:
+                    proceso.start()
 
-                    # TODO: Only to test
-                    i['time'] = metascore.how_long_beat(i["name"])
-                    i['meta'] = metascore.meta(i["name"])
+                print("NODE_SECONDARY_2>Waiting for the threads to finish their work")
+                for t in piscina:
+                    t.join()
 
-                print('NODE_SECONDARY_2>Sending response to node 1')
+                print("NODE_SECONDARY_2>End of thread work")
+                print('NODE_SECONDARY_2>Sending response to Node 1')
                 res = pickle.dumps(new_data)
                 connection.sendall(res)
                 break
