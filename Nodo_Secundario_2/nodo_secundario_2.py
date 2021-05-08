@@ -42,8 +42,10 @@ while True:
                 # TODO: Find How Long To Beat and MetaScore
                 for i in new_data:
 
-                    i['time'] = metascore.how_long_beat(i["name"])
-                    i['meta'] = metascore.meta(i["name"])
+                    #i['time'] = metascore.how_long_beat(i["name"])
+                    #i['meta'] = metascore.meta(i["name"])
+                    i['time'] = "1"
+                    i['meta'] = "4"
 
                 print('NODE_SECONDARY_2>Sending response to node 1')
                 res = pickle.dumps(new_data)

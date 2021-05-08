@@ -3,6 +3,18 @@ import sys
 import pickle
 import json
 from search_games import search
+import multiprocessing
+from joblib import Parallel, delayed
+
+
+def bestPrice(gameData):
+    best_price = search(gameData['name'], gameData['price'])
+    if (best_price != False):
+        gameData['price'] = "US$"+best_price
+        gameData['store'] = "Amazon"
+        print(gameData['name'] + " " + gameData['price'])
+    return gameData
+
 
 # it should be in .env
 ip = 'localhost'
@@ -38,18 +50,15 @@ while True:
                 print("NODE_SECONDARY_1>List Emply")
 
             if data:
-                #TODO: Find the best price
-                for i  in new_data:
-                
-                    best_price = search(i['name'], i['price'])
-                    if (best_price != False):
-                        i['price'] = "US$"+best_price
-                        i['store'] = "Amazon"
-                
+                # TODO: Find the best price
+                pool = multiprocessing.Pool(
+                    processes=multiprocessing.cpu_count())
+                new_data = pool.map(bestPrice, new_data)
+
                 print('NODE_SECONDARY_1>Sending response to node 1')
                 res = pickle.dumps(new_data)
                 connection.sendall(res)
-                break 
+                break
             else:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break

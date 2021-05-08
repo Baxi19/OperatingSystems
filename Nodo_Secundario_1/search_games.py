@@ -10,6 +10,8 @@ def search(name, price):
     # Selenium
     options = webdriver.ChromeOptions()
     options.add_argument('--incognito')
+    options.add_argument('headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver = webdriver.Chrome(
         executable_path="../chromedriver", options=options)
