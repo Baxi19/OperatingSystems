@@ -2,7 +2,6 @@ import socket
 import sys
 import pickle
 import json
-#import requests
 import metascore
 
 # it should be in .env
@@ -45,8 +44,6 @@ while True:
                     # TODO: Only to test
                     i['time'] = metascore.how_long_beat(i["name"])
                     i['meta'] = metascore.meta(i["name"])
-                    #i['time'] = "1"
-                    #i['meta'] = "4"
 
                 print('NODE_SECONDARY_2>Sending response to node 1')
                 res = pickle.dumps(new_data)

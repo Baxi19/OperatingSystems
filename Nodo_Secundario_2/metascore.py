@@ -12,7 +12,7 @@ def how_long_beat( name):
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         if((best_element.gameplay_main==-1)|(best_element.gameplay_main==None)):
-            best_element.gameplay_main=randint(0, 100)
+            best_element.gameplay_main=random.randint(0, 100)
         return(format_result(str(best_element.gameplay_main)))
         
 def format_result(time_to_beat):
