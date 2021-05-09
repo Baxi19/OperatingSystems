@@ -3,6 +3,29 @@ import sys
 import pickle
 import json
 from search_games import search
+import threading
+
+
+class myThread (threading.Thread):
+    def __init__(self, threadID, name, game):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.game = game
+    def run(self):
+        print("NODE_SECONDARY_1>Starting Thread: " + self.name)
+        threadLock.acquire() # Get lock to synchronize threads
+        task(self.game)
+        threadLock.release() # Free lock to release next thread
+
+
+# Task to get first info
+def task(i):
+    best_price = search(i['name'], i['price'])
+    if (best_price != False):
+        i['price'] = "US$"+best_price
+        i['store'] = "Amazon"
+    pass
 
 
 # it should be in .env
@@ -40,22 +63,28 @@ while True:
 
             if data:
                 #TODO: insert your code here
-                for i  in new_data:
-                    """
-                    #TODO: Check method
-                    best_price = search(i['name'], i['price'])
-                    if (best_price != False):
-                        i['price'] = "US$"+best_price
-                        i['store'] = "Amazon"
-                    """
-                    #TODO: Only to test
-                    i['price'] = "US$0.99"
-                    i['store'] = "Amazon"
+                threadLock = threading.Lock()
+                piscina = [] # Pool
                 
-                print('NODE_SECONDARY_1>Sending response to node 1')
+                for i in new_data:
+                    print("NODE_SECONDARY_1>New Thread id: " + i['id'])
+                    piscina.append(myThread(i['id'], i['name'], i))
+            
+                # Start
+                print("NODE_SECONDARY_1>Starting threads")
+                for proceso in piscina:
+                    proceso.start()
+
+                print("NODE_SECONDARY_1>Waiting for the threads to finish their work")
+                for t in piscina:
+                    t.join()
+
+                print("NODE_SECONDARY_1>End of thread work")
+                print('NODE_SECONDARY_1>Sending response to Node 1')
                 res = pickle.dumps(new_data)
                 connection.sendall(res)
-                break 
+                break
+                
             else:
                 print('NODE_SECONDARY_1>No data from', client_address)
                 break
