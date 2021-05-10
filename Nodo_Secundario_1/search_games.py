@@ -41,18 +41,21 @@ def search(name, price):
         # Price wasn't available
         if ("US$" in price_find == False):
             return False
+        else:
+            price_find = price_find.split("US$\xa0")[1]
 
         # Price in PS wasn't available
         if ("US$" in price == True):
             price = price.split("US$")[1]
         else: 
-            pass
+            return False
 
-        price_find = price_find.split("US$\xa0")[1]
         return compare_price(price, price_find)
 
 def compare_price(actual_price, price_find):
     if (actual_price <= price_find):
-        return False
+        discount = round(((int(price_find) - int(actual_price))/int(price_find))*100)
+        return [discount]
     else:
-        return price_find
+        discount = round(((int(actual_price) - int(price_find))/int(actual_price))*100)
+        return [price_find, discount]

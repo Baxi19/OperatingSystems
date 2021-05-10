@@ -22,10 +22,13 @@ class myThread (threading.Thread):
 # Task to get first info
 def task(i):
     best_price = search(i['name'], i['price'])
-    if (best_price != False):
-        i['price'] = "US$"+best_price
+    if (best_price != False and len(best_price)==2):
+        i['price'] = "US$"+str(best_price[0]) + "  (-" + str(best_price[1]) + "%)"
         i['store'] = "Amazon"
-    pass
+    elif (best_price == False):
+        pass
+    else:
+        i['price'] = i['price'] + "  (-" + str(best_price[0]) + "%)"
 
 
 # it should be in .env

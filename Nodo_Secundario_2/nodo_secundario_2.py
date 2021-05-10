@@ -24,9 +24,9 @@ class myThread (threading.Thread):
 def task(i):
     time = metascore.how_long_beat(i["name"])
     if time is None:
-        i['time'] = random.randint(3, 8) + " Hours"    
+        i['time'] = str(random.randint(3, 8)) + " Hours"    
     else:
-        i['time'] = time  + " Hours" 
+        i['time'] = str(time)  + " Hours" 
     i['meta'] = metascore.meta(i["name"]) 
     pass
 
