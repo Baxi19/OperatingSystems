@@ -9,7 +9,8 @@ import requests
 # Clean the games list
 # TODO:If you are using the local server you should change the url by  flash server url
 def deleteAllGames():
-    url = 'https://operating-systems.herokuapp.com/delete'
+    #url = 'https://operating-systems.herokuapp.com/delete'
+    url = 'http://127.0.0.1:5000/delete'
     res = requests.get(url)
     print("NODE_1>Delete all games in server: " + res.text)
     return True
@@ -17,7 +18,8 @@ def deleteAllGames():
 # PS5
 # TODO:If you are using the local server you should change the url by  flash server url
 def insertAllGames(games):
-    url = 'https://operating-systems.herokuapp.com/games'
+    #url = 'https://operating-systems.herokuapp.com/games'
+    url = 'http://127.0.0.1:5000/games'
     header = {"content-type": "application/json"}
     data = json.dumps({'array': games})
     res = requests.post(url, data=data, headers=header)
@@ -76,12 +78,10 @@ def task(i, shared_list):
     data = pickle.dumps(array)
 
     # Send by sockets
-    #client = Socket_Client("192.168.0.3", 10000, data)
     client = Socket_Client("localhost", 10000, data)
     client.send()
     data_node1 = client.result()
     
-    #client2 = Socket_Client("192.168.0.3", 11000, data)
     client2 = Socket_Client("localhost", 11000, data)
     client2.send()
     data_node2 =client2.result()
