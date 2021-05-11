@@ -1,8 +1,20 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 CORS(app)
+
+mail_settings = {
+    "MAIL_SERVER": 'smtp.gmail.com',
+    "MAIL_PORT": 465,
+    "MAIL_USE_TLS": False,
+    "MAIL_USE_SSL": True,
+    "MAIL_USERNAME": 'lenguajessofware@gmail.com',
+    "MAIL_PASSWORD": 'Lenguajes123'
+}
+app.config.update(mail_settings)
+mail = Mail(app)
 
 # Games list
 games = []
@@ -33,6 +45,26 @@ def games():
     if request.method == 'POST':
         games = request.json['array']
         return jsonify({"status": "ok", "size": len(games)})
+
+# Sent email 
+@app.route("/email", methods=['POST'])
+def subscribed_email():
+    if request.method == 'POST':
+        try:
+            data = request.json #[email, game]
+            send_email('You are Subscribed!',[data[0]], "Game: " + data[1]['name'] + "\nPrice: " + data[1]['price'])
+            return jsonify({"status": "ok", "email":"sended"})
+        except:
+            print("Error email method")
+
+
+def send_email(subject,recipients,body):
+    with app.app_context():
+        msg = Message(subject=subject,
+                      sender=app.config.get("MAIL_USERNAME"),
+                      recipients=recipients,
+                      body=body)
+        mail.send(msg)
 
 if __name__ == "__main__":
     # 'ipv4' o localhost

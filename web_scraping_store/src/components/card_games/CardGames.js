@@ -1,11 +1,13 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Rating from "@material-ui/lab/Rating";
 import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
+import NotificationAlert from "./NotificationAlert";
 
 const useStyles = makeStyles({
   root: {
@@ -20,7 +22,7 @@ const useStyles = makeStyles({
 
 const CardGames = React.forwardRef((props, ref) => {
   const classes = useStyles();
-  
+
   return (
     <>
       <Card className={classes.root}>
@@ -31,7 +33,15 @@ const CardGames = React.forwardRef((props, ref) => {
             title="Contemplative Reptile"
           />
           <CardContent>
-            <Rating name="read-only" value={props.item["meta"]} readOnly /> {/*TODO: Set metadata in value*/}
+            <Grid
+              container
+              direction="row"
+              justify="space-between"
+              alignItems="center"
+            >
+              <Rating name="read-only" value={props.item["meta"]} readOnly />{" "}
+              <NotificationAlert item={props.item} />
+            </Grid>
             <Typography gutterBottom variant="h5" component="h2">
               {`${props.item["name"]}`}
             </Typography>
