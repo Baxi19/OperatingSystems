@@ -13,6 +13,7 @@ venv\Scripts\activate
 ### Se instala Flask
 ```
 pip install Flask
+pip install flask_mail
 ```
 
 ### Se instala Cors

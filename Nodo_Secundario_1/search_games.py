@@ -10,12 +10,14 @@ def search(name, price):
     # Selenium
     options = webdriver.ChromeOptions()
     options.add_argument('--incognito')
+    options.add_argument('headless')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver = webdriver.Chrome(
         executable_path="../chromedriver", options=options)
     driver.get(url)
 
-    time.sleep(2)
+    time.sleep(3)
 
     searchTextBox = driver.find_element_by_id('twotabsearchtextbox')
     searchTextBox.clear()
@@ -37,20 +39,22 @@ def search(name, price):
         price_find_element = driver.find_element_by_xpath('//*[@class="a-offscreen"]')
         price_find = price_find_element.get_attribute('innerText')
         # Price wasn't available
-        if ("US$" in price_find == False):
+        if (("US$" in price_find) == False):
             return False
 
         # Price in PS wasn't available
-        if ("US$" in price == True):
+        if ("US$" in price):
             price = price.split("US$")[1]
         else: 
-            pass
+            return False
 
         price_find = price_find.split("US$\xa0")[1]
         return compare_price(price, price_find)
 
 def compare_price(actual_price, price_find):
-    if (actual_price <= price_find):
-        return False
+    if (float(actual_price) <= float(price_find)):
+        discount = round(((int(float(price_find)) - int(float(actual_price)))/int(float(price_find)))*100)
+        return [discount]
     else:
-        return price_find
+        discount = round(((int(float(actual_price)) - int(float(price_find)))/int(float(actual_price)))*100)
+        return [float(price_find), discount]
