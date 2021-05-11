@@ -21,7 +21,6 @@ const Home = () => {
 
   useEffect(() => {
     setGames([]);
-    setTimeout("", 1000);
     getGamesInfo();
   }, [games]);
 

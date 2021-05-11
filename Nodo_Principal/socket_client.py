@@ -27,6 +27,7 @@ class Socket_Client:
 
             # Look for the response
             self.res = pickle.loads(sock.recv(8192))
+            print('NODE_1>Get Response of sockets')
             
             
         finally:

@@ -3,10 +3,12 @@ import axios from "axios";
 //******************************CONSTANTS******************************
 const initialData = {
   array: [],
+  subscribers: [],
 };
 
 //******************************TYPES******************************
 const GET_GAMES_INFO = "GET_GAMES_INFO";
+const NOTIFY_EMAIL = "NOTIFY_EMAIL";
 
 //******************************REDUCER******************************
 export default function gamesReducer(state = initialData, action) {
@@ -15,6 +17,12 @@ export default function gamesReducer(state = initialData, action) {
       return {
         ...state,
         array: action.payload.array,
+      };
+
+    case NOTIFY_EMAIL:
+      return {
+        ...state,
+        subscribers: action.payload.subscribers,
       };
 
     default:
@@ -26,13 +34,33 @@ export default function gamesReducer(state = initialData, action) {
 //Action to get games's list
 export const getGamesInfoActions = () => async (dispatch, getState) => {
   try {
-    await axios.get(`${process.env.REACT_APP_API_URL}getGames`)
-    .then(async (res) => {
-      console.log(res.data.array.length);
+    await axios
+      //.get(`${process.env.REACT_APP_API_URL}getGames`)
+      .get(`http://127.0.0.1:5000/getGames`)
+      .then(async (res) => {
+        console.log(res.data.array.length);
+        dispatch({
+          type: GET_GAMES_INFO,
+          payload: {
+            array: res.data.array,
+          },
+        });
+      });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//Action to get games's list
+export const notifyActions = (data) => async (dispatch, getState) => {
+  try {
+    const { subscribers } = getState().games;
+    await axios.post(`http://127.0.0.1:5000/email`, data)
+      .then(async (res) => {
       dispatch({
-        type: GET_GAMES_INFO,
+        type: NOTIFY_EMAIL,
         payload: {
-          array: res.data.array,
+          subscribers: subscribers.push(data),
         },
       });
     });

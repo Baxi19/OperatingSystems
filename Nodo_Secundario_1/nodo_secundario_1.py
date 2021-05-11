@@ -62,7 +62,6 @@ while True:
                 print("NODE_SECONDARY_1>List Emply")
 
             if data:
-                #TODO: insert your code here
                 threadLock = threading.Lock()
                 piscina = [] # Pool
                 
