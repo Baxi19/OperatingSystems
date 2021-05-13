@@ -36,7 +36,7 @@ export const getGamesInfoActions = () => async (dispatch, getState) => {
   try {
     await axios
       //.get(`${process.env.REACT_APP_API_URL}getGames`)
-      .get(`http://127.0.0.1:5000/getGames`)
+      .get(`http://localhost:5000/getGames`)
       .then(async (res) => {
         console.log(res.data.array.length);
         dispatch({
@@ -55,7 +55,7 @@ export const getGamesInfoActions = () => async (dispatch, getState) => {
 export const notifyActions = (data) => async (dispatch, getState) => {
   try {
     const { subscribers } = getState().games;
-    await axios.post(`http://127.0.0.1:5000/email`, data)
+    await axios.post(`http://localhost:5000/email`, data)
       .then(async (res) => {
       dispatch({
         type: NOTIFY_EMAIL,
