@@ -1,6 +1,17 @@
 # Operating Systems
 
 
+## Cliente Web
+
+<div class="row" align="center">
+  <img src="web.jpeg" width="600" height="400" />
+</div>
+
+<div class="row" align="center">
+  <img src="mobile.jpeg" width="200" height="400" />
+</div>
+
+
 ## Diagrama de arquitectura 
 
 <div class="row" align="center">
