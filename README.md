@@ -7,6 +7,7 @@
   <img src="web.jpeg" width="800" height="400" />
 </div>
 
+## Cliente Web / Responsive
 <div class="row" align="center">
   <img src="mobile.jpeg" width="200" height="400" />
 </div>
