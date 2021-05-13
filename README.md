@@ -4,7 +4,7 @@
 # Diagrama 
 
 <div class="row" align="center">
-  <img src="./DIAGRAMA.PNG" width="600" height="400" />
+  <img src="Diagrama.PNG" width="600" height="400" />
 </div>
 
 
