@@ -10,8 +10,8 @@ mail_settings = {
     "MAIL_PORT": 465,
     "MAIL_USE_TLS": False,
     "MAIL_USE_SSL": True,
-    "MAIL_USERNAME": 'lenguajessofware@gmail.com',
-    "MAIL_PASSWORD": 'Lenguajes123'
+    "MAIL_USERNAME": 'usuario@gmail.com', #TODO: Change by your gmail
+    "MAIL_PASSWORD": 'password123' #TODO: Change by your password
 }
 app.config.update(mail_settings)
 mail = Mail(app)
