@@ -4,7 +4,7 @@
 ## Cliente Web
 
 <div class="row" align="center">
-  <img src="web.jpeg" width="600" height="400" />
+  <img src="web.jpeg" width="800" height="400" />
 </div>
 
 <div class="row" align="center">
