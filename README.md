@@ -1,5 +1,13 @@
 # Operating Systems
 
+
+# Diagrama 
+
+<div class="row" align="center">
+  <img src="./DIAGRAMA.PNG" width="600" height="400" />
+</div>
+
+
 ### Pasos para ejecutar el proyecto
 
 **Cada carpeta es un proyecto diferente, en cada uno de los proyectos se encuentra un archivo README.md donde se explica como instalar cada modulo y sus dependencias**
