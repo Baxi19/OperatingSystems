@@ -1,7 +1,7 @@
 # Operating Systems
 
 
-# Diagrama 
+## Diagrama de arquitectura 
 
 <div class="row" align="center">
   <img src="Diagrama.PNG" width="600" height="400" />
